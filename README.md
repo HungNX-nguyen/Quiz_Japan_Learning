@@ -49,3 +49,9 @@ Mở http://127.0.0.1:4173. Sau khi sửa source chạy lại `npm run build`, r
 - `tests/quiz.test.mjs`: kiểm tra dữ liệu và logic.
 
 Trong source câu hỏi, lựa chọn đầu tiên là đáp án đúng; giao diện đảo vị trí trước khi hiển thị. Không thêm dữ liệu vào HTML đã build: sửa source rồi build lại.
+
+## Tra cứu khi bôi đen
+
+Bôi đen từ/cụm tiếng Nhật trong nội dung học; dừng chọn khoảng nửa giây để mở modal. Modal hiển thị cách đọc, nghĩa tiếng Việt của từ có trong bộ quiz hoặc giải thích mẫu ngữ pháp nhận diện được. Có ánh xạ một số dạng chia phổ biến về dạng từ điển (ví dụ 守り → 守る). Chọn cả cụm chưa có nghĩa riêng sẽ hiển thị các thành phần nhận diện được, không tự ghép bản dịch. Mục ngoài dữ liệu có thông báo và liên kết Jisho (mở trang ngoài, cần mạng). Không có API dịch tự động.
+
+Đóng bằng Escape, nút Đóng hoặc nhấn vùng nền. Tra cứu không thay đổi điểm hay câu trả lời. Dữ liệu tra cứu được gói cùng HTML để dùng ngoại tuyến. Đã kiểm tra mở modal bằng bôi đen và đóng bằng Escape trên trình duyệt; npm test: 13/13.

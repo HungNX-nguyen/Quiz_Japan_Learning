@@ -1,0 +1,1 @@
+{"version":"0.0.1","configurations":[{"name":"kanji-quiz","runtimeExecutable":"node","runtimeArgs":["scripts/serve.mjs"],"port":4173}]}

@@ -1,11 +1,13 @@
 import { build } from 'esbuild';
+import { execFileSync } from 'node:child_process';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 const root=fileURLToPath(new URL('../',import.meta.url));
+execFileSync(process.execPath,[fileURLToPath(new URL('./gen-dict.mjs',import.meta.url))],{stdio:'inherit'});
 const result=await build({absWorkingDir:root,entryPoints:['src/App.jsx'],bundle:true,write:false,minify:true,format:'iife',jsx:'automatic',define:{'process.env.NODE_ENV':'"production"'},target:['es2020'],legalComments:'inline'});
-const css=await readFile(new URL('../src/styles.css',import.meta.url),'utf8');
+const css=(await Promise.all(['styles.css','refresh.css','sakura.css'].map(name=>readFile(new URL('../src/'+name,import.meta.url),'utf8')))).join('\n');
 const js=result.outputFiles[0].text.replace(/<\/script/gi,'<\\/script');
-const html=`<!doctype html>\n<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#7b6199"><meta name="description" content="Ôn kanji bài 7–10 cùng ngữ pháp: 80 câu, giải thích tiếng Việt, lưu tiến độ ngoại tuyến."><title>Kanji no Niwa · Góc ôn tập</title><style>${css}</style></head><body><div id="root"></div><noscript>Hãy bật JavaScript để làm quiz.</noscript><script>${js}</script></body></html>`;
+const html=`<!doctype html>\n<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#c2185b"><meta name="description" content="Ôn kanji bài 7–10 cùng ngữ pháp: 80 câu, giải thích tiếng Việt, lưu tiến độ ngoại tuyến."><script>try{var t=localStorage.getItem('kanji-no-niwa-theme');if(t!=='dark'&&t!=='light')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;}catch(e){}</script><title>Kanji no Niwa · Vườn kanji mùa hoa</title><style>${css}</style></head><body><div id="root"></div><noscript>Hãy bật JavaScript để làm quiz.</noscript><script>${js}</script></body></html>`;
 await mkdir(new URL('../dist/',import.meta.url),{recursive:true});
 await writeFile(new URL('../dist/index.html',import.meta.url),html);
 await writeFile(new URL('../quiz.html',import.meta.url),html);
